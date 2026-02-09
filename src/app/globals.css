@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+:root {
+  --pink-1: #ffe1f0;
+  --pink-2: #ff8cc8;
+  --pink-3: #ff4fa8;
+  --white: #ffffff;
+  --text: #1b1b1b;
+
+  --border: rgba(0, 0, 0, 0.05);
+  --card: rgba(255, 255, 255, 0.72);
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.12);
+  --radius: 22px;
+  --accent: #e13777;
+} /* start visible */
+@keyframes floatUpFront {
+  0% {
+    transform: translateX(-50%) translateY(0) rotate(0deg) scale(0.95);
+    opacity: 1;
+  }
+  60% {
+    transform: translateX(calc(-50% + (var(--drift) * 0.7))) translateY(-80vh)
+      rotate(calc(var(--rot) * 0.7)) scale(1.03);
+  }
+  100% {
+    transform: translateX(calc(-50% + var(--drift))) translateY(-140vh)
+      rotate(var(--rot)) scale(1.06);
+    opacity: 0;
+  }
+}
+
+@keyframes floatUpBack {
+  0% {
+    transform: translateX(-50%) translateY(0) rotate(0deg) scale(0.9);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(-50% + (var(--drift) * 0.55))) translateY(-150vh)
+      rotate(calc(var(--rot) * 0.5)) scale(1.08);
+    opacity: 0;
+  }
+}
+
+@keyframes sway {
+  0% {
+    margin-left: 0px;
+  }
+  50% {
+    margin-left: var(--sway);
+  }
+  100% {
+    margin-left: 0px;
+  }
+}
+
+.animate-heart-float-front {
+  animation: floatUpFront linear forwards;
+}
+.animate-heart-float-back {
+  animation: floatUpBack linear forwards;
+}
+
+/* delay sway too so it doesn't wiggle while sitting */
+.animate-heart-float-front,
+.animate-heart-float-back {
+  animation-name: inherit, sway;
+  animation-duration: inherit, var(--swaySpeed);
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards, none;
+  animation-delay: inherit, inherit;
+}
+
+body {
+  background: linear-gradient(135deg, var(--pink-2) 0%, var(--pink-3) 100%);
+  overflow-x: hidden;
+}
+button:focus {
+  border: none;
+}
+.pulsescale {
+  animation: pulseScale 1.5s ease-in-out infinite;
+}
+@keyframes pulseScale {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes softBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px; /* overall area */
+}
+
+.eq__bar {
+  display: block; /* IMPORTANT */
+  width: 3px;
+  height: 4px; /* paused height */
+  background: #fff;
+  border-radius: 999px;
+  transform-origin: bottom;
+}
+
+/* PLAYING state */
+.eq--play .eq__bar {
+  animation: eq-bounce 900ms ease-in-out infinite;
+}
+
+/* different timing = Spotify vibe */
+.eq--play .eq__bar:nth-child(1) {
+  animation-delay: 0ms;
+}
+.eq--play .eq__bar:nth-child(2) {
+  animation-delay: 120ms;
+}
+.eq--play .eq__bar:nth-child(3) {
+  animation-delay: 240ms;
+}
+.eq--play .eq__bar:nth-child(4) {
+  animation-delay: 360ms;
+}
+
+/* PAUSED state: lock them small, no animation */
+.eq--pause .eq__bar {
+  animation: none;
+  height: 10px;
+  border-radius: 50%;
+}
+
+@keyframes eq-bounce {
+  0%,
+  100% {
+    height: 4px;
+  }
+  25% {
+    height: 14px;
+  }
+  50% {
+    height: 7px;
+  }
+  75% {
+    height: 16px;
+  }
+}
+.eq {
+  display: flex;
+  align-items: center; /* CENTER vertically */
+  justify-content: center;
+  gap: 3px;
+  height: 18px;
+}
+
+button:focus, input:focus {
+  --tw-outline-style: none;
+  outline-style: none;
+}
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.25s ease-out;
+}
+
+/* Base bar */
+.eq__bar {
+  width: 3px;
+  height: 12px; /* base size */
+  background: color-mix(
+    in oklab,
+    var(--color-red-600) /* oklch(57.7% 0.245 27.325) */ 60%,
+    transparent
+  );
+  border-radius: 999px;
+
+  /* CRITICAL */
+  transform-origin: center;
+  transform: scaleY(0.3); /* paused = small, centered */
+}
+
+/* Playing = animate */
+.eq--play .eq__bar {
+  animation: eq-center 900ms ease-in-out infinite;
+}
+
+/* Natural offsets */
+.eq--play .eq__bar:nth-child(1) {
+  animation-delay: 0ms;
+}
+.eq--play .eq__bar:nth-child(2) {
+  animation-delay: 120ms;
+}
+.eq--play .eq__bar:nth-child(3) {
+  animation-delay: 240ms;
+}
+.eq--play .eq__bar:nth-child(4) {
+  animation-delay: 360ms;
+}
+
+/* Paused = frozen in center */
+.eq--pause .eq__bar {
+  animation: none;
+  transform: scaleY(0.3);
+}
+
+/* Center-based bounce */
+@keyframes eq-center {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+
+  25% {
+    transform: scaleY(1);
+  }
+
+  50% {
+    transform: scaleY(0.5);
+  }
+
+  75% {
+    transform: scaleY(1.3);
+  }
+}
+
+.animate-soft-bounce {
+  animation: softBounce 3s linear infinite;
+}
