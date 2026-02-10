@@ -233,6 +233,11 @@ const Landing = () => {
       setLoading(false);
     }
   };
+  const goBack = () => {
+    setError("");
+    setLoading(false);
+    setStep((prev) => Math.max(1, prev - 1));
+  };
 
   return (
     <>
@@ -283,6 +288,15 @@ const Landing = () => {
           <div className="my-5">
             <div className="flex px-5 items-center justify-center min-h-screen">
               <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
+                <button
+                  type="button"
+                  onClick={goBack}
+                  disabled={loading}
+                  className="absolute top-4 left-4 flex items-center gap-1 text-sm text-red-700 hover:text-red-900 font-medium"
+                >
+                  ← Back
+                </button>
+
                 <div className="grid justify-items-center">
                   <div className="font-bold text-xl sm:text-2xl pt-4">
                     <div className="text-center max-w-100">
@@ -437,6 +451,15 @@ const Landing = () => {
         )}
         {step === 3 && (
           <div className="text-center grid gap-0 place-items-center backdrop-blur-sm shadow-lg bg-white/20 border  border-white/20 rounded-3xl p-7.5">
+            <button
+              type="button"
+              onClick={goBack}
+              disabled={loading}
+              className="absolute top-4 left-4 flex items-center gap-1 text-sm text-red-700 hover:text-red-900 font-medium"
+            >
+              ← Back
+            </button>
+
             <div className="text-xl font-bold">Generated ✅</div>
             <div className="text-m mt-2 opacity-80">
               <span>Website at: </span>
@@ -481,6 +504,15 @@ const Landing = () => {
         {step == 4 && (
           <div className="flex px-5 items-center justify-center min-h-screen">
             <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
+              <button
+                type="button"
+                onClick={goBack}
+                disabled={loading}
+                className="absolute top-4 left-4 flex items-center gap-1 text-sm text-red-700 hover:text-red-900 font-medium"
+              >
+                ← Back
+              </button>
+
               <div className="grid justify-items-center">
                 <p className="font-bold pb-2 mb-2 text-xl max-w-70 text-center">
                   Check all the links associated with your email
@@ -515,10 +547,19 @@ const Landing = () => {
           </div>
         )}
         {step == 5 && (
-          <div>
+          <div className="my-5">
             {results.length > 0 ? (
               <div className="flex px-5 mt-20 items-center justify-center min-h-screen">
                 <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
+                  <button
+                    type="button"
+                    onClick={goBack}
+                    disabled={loading}
+                    className="absolute top-4 left-4 flex items-center gap-1 text-sm text-red-700 hover:text-red-900 font-medium"
+                  >
+                    ← Back
+                  </button>
+
                   <div className="grid justify-items-center">
                     <div className="space-y-3 w-full max-w-md">
                       <h3 className="font-bold text-lg">
@@ -550,6 +591,14 @@ const Landing = () => {
             ) : (
               <div className="flex px-5 items-center min-w-70 justify-center min-h-screen">
                 <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
+                  <button
+                    type="button"
+                    onClick={goBack}
+                    disabled={loading}
+                    className="absolute top-4 left-4 flex items-center gap-1 text-sm text-red-700 hover:text-red-900 font-medium"
+                  >
+                    ← Back
+                  </button>
                   <div className="grid justify-items-center">
                     <p className="font-bold text-center">
                       We couldn’t find any links associated with this email.
