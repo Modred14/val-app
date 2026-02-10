@@ -248,7 +248,7 @@ const Landing = () => {
               <div className="grid justify-items-center">
                 <div className="font-bold text-xl sm:text-3xl max-w-100 pt-4">
                   <div className="text-center pb-3">
-                    Welcome to Valentine Message Generator 💌
+                    Welcome to Valentine Web Generator 💌
                   </div>
                 </div>
                 <div className="pt-2 text-center text-sm text-red-900/80">
