@@ -547,9 +547,9 @@ const Landing = () => {
           </div>
         )}
         {step == 5 && (
-          <div className="my-5">
+          <div className="">
             {results.length > 0 ? (
-              <div className="flex px-5 mt-20 items-center justify-center min-h-screen">
+              <div className="flex px-5 my-5 items-center justify-center min-h-screen">
                 <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
                   <button
                     type="button"
