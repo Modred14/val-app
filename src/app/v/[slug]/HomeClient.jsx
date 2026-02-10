@@ -152,29 +152,76 @@ const Home = ({ data }) => {
   const owner = data?.owner;
   const user = data?.link;
 
-  const handleMediaLoad = () => {
-    setLoadedCount((prev) => prev + 1);
-  };
-
   useEffect(() => {
-    let alive = true;
+    const list = user?.pictures || [];
+    setMediaList(list);
 
-    const run = async () => {
-      setMediaLoading(true);
-      try {
-        const list = user?.pictures || []; // use correct field
-        if (!alive) return;
-        setMediaList(list);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        if (alive) setMediaLoading(false); // ✅ this is what you are missing
-      }
-    };
+    // If no media, don't block the page
+    if (list.length === 0) {
+      setMediaLoading(false);
+      return;
+    }
 
-    run();
+    let cancelled = false;
+    setMediaLoading(true);
+
+    const timeout = (ms) =>
+      new Promise((resolve) => setTimeout(() => resolve("timeout"), ms));
+
+    const preloadImage = (src) =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve("ok");
+        img.onerror = () => resolve("error");
+        img.src = src;
+      });
+
+    const preloadVideo = (src) =>
+      new Promise((resolve) => {
+        const video = document.createElement("video");
+        video.preload = "auto";
+        video.muted = true; // helps some browsers
+        video.playsInline = true;
+
+        const done = (status) => {
+          cleanup();
+          resolve(status);
+        };
+
+        const cleanup = () => {
+          video.removeEventListener("loadeddata", onLoaded);
+          video.removeEventListener("error", onError);
+          // stop any network usage
+          video.src = "";
+          video.load();
+        };
+
+        const onLoaded = () => done("ok");
+        const onError = () => done("error");
+
+        video.addEventListener("loadeddata", onLoaded);
+        video.addEventListener("error", onError);
+
+        video.src = src;
+        video.load();
+      });
+
+    (async () => {
+      const loaders = list.map((m) => {
+        const load =
+          m.type === "video" ? preloadVideo(m.link) : preloadImage(m.link);
+
+        // hard stop per item so one bad link doesn't hold your site hostage
+        return Promise.race([load, timeout(12000)]);
+      });
+
+      await Promise.all(loaders);
+
+      if (!cancelled) setMediaLoading(false);
+    })();
+
     return () => {
-      alive = false;
+      cancelled = true;
     };
   }, [user]);
 
@@ -363,10 +410,20 @@ const Home = ({ data }) => {
             </div>
             <div className="grid grid-cols-2 gap-2 mt-7">
               {mediaLoading && (
-                <div className="flex justify-center py-10">
-                  <p className="text-sm animate-pulse text-gray-700">
-                    Loading memories... 💕
-                  </p>
+                <div className="col-span-2 w-full min-h-28 grid place-items-center">
+                  <div className="flex flex-col items-center gap-3">
+                    {/* Hearts Loader */}
+                    <div className="flex gap-2">
+                      <span className="heart-loader">❤️</span>
+                      <span className="heart-loader">💖</span>
+                      <span className="heart-loader">💗</span>
+                    </div>
+
+                    {/* Text */}
+                    <p className="text-sm font-bold animate-pulse text-gray-700 text-center">
+                      Please wait... Loading memories... 💕
+                    </p>
+                  </div>
                 </div>
               )}
 
