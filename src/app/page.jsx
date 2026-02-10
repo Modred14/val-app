@@ -431,7 +431,7 @@ const Landing = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                {`http://localhost:3000/v/${webLink}`}
+                {`https://hehe-hmm.netlify.app/v/${webLink}`}
               </a>
               <span>
                 <button
@@ -439,7 +439,7 @@ const Landing = () => {
                   onClick={async () => {
                     try {
                       await navigator.clipboard.writeText(
-                        `http://localhost:3000/v/${webLink}`,
+                        `https://hehe-hmm.netlify.app/v/${webLink}`,
                       );
 
                       alert("Link copied ✅"); // optional feedback

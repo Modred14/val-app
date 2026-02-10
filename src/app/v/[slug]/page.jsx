@@ -8,7 +8,7 @@ export default async function Page(props) {
   const host = h.get("host");
   const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
 
-  const res = await fetch(`${protocol}://${host}/api/generated-sites/${slug}`, {
+  const res = await fetch(`https://hehe-hmm.netlify.app/api/generated-sites/${slug}`, {
     cache: "no-store",
   });
 
