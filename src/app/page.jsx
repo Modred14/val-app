@@ -125,7 +125,7 @@ const Landing = () => {
       if (!data?.secure_url) {
         throw new Error("Upload succeeded but no URL returned.");
       }
-     
+
       return data.secure_url; // Always use https
     } catch (err) {
       setLoading(false);
@@ -145,16 +145,19 @@ const Landing = () => {
     // Ruthless validation: don’t send trash
     if (!myEmail.trim() || !myName.trim()) {
       setError("Your email and your name are required.");
+      setLoading(false);
       return;
     }
     if (!hisHerName.trim() || !hisHerOtherName.trim()) {
       setError("His/Her name is required.");
+      setLoading(false);
       return;
     }
     const hasAllMedia = mediaFiles.every((f) => f !== null);
 
     if (!hasAllMedia) {
       setError("Kindly upload all 4 images/videos.");
+      setLoading(false);
       return;
     }
     const capitalize = (str) => {
@@ -224,6 +227,7 @@ const Landing = () => {
       setWebLink(data.slug);
       setStep(3);
     } catch (e) {
+      setLoading(false);
       setError(e?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -232,7 +236,7 @@ const Landing = () => {
 
   return (
     <>
-      <div className="flex  relative items-center focus:outline-none justify-center min-h-screen">
+      <div className="flex m-2 relative items-center focus:outline-none justify-center min-h-screen">
         {step == 1 && (
           <div className="flex px-5 items-center justify-center min-h-screen">
             <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
@@ -286,7 +290,11 @@ const Landing = () => {
                     </div>
                   </div>
                   <div className="pt-2 text-sm text-red-900/80">
-                    <form action="">
+                    <form
+                      className={
+                        loading ? "pointer-events-none opacity-80" : ""
+                      }
+                    >
                       <div className="grid sm:grid-cols-2 gap-4 mt-3">
                         <div className="">
                           <label className="sm:col-span-2 text-sm">
@@ -300,6 +308,7 @@ const Landing = () => {
                             className="bg-gray-200  w-full text-black border focus:border-0 border-red-600/50 rounded-md mt-1 py-2 px-3"
                             placeholder="Daniel"
                             required
+                            disabled={loading}
                           />
                         </div>
                         <div className="">
@@ -309,6 +318,7 @@ const Landing = () => {
                           <input
                             type="email"
                             name="email"
+                            disabled={loading}
                             onChange={(e) => setMyEmail(e.target.value)}
                             id="email"
                             className="bg-gray-200  w-full text-black border focus:border-0 border-red-600/50 rounded-md mt-1 py-2 px-3"
@@ -328,6 +338,7 @@ const Landing = () => {
                             className="bg-gray-200  w-full text-black border focus:border-0 border-red-600/50  rounded-md mt-1 py-2 px-3"
                             placeholder="John"
                             required
+                            disabled={loading}
                           />
                         </div>
                         <div className="">
@@ -337,6 +348,7 @@ const Landing = () => {
                           <input
                             name="othername"
                             id="othername"
+                            disabled={loading}
                             onChange={(e) => setHisHerOtherName(e.target.value)}
                             className="bg-gray-200  h-9.25  w-full text-black border focus:border-0 border-red-600/50  rounded-md mt-1 py-2 px-3"
                             placeholder="Doe"
@@ -359,6 +371,7 @@ const Landing = () => {
                               onChange={(e) =>
                                 handleTypeChange(i, e.target.value)
                               }
+                              disabled={loading}
                               className="w-full mt-1 text-black bg-gray-200 border h-10 border-red-600/50 rounded-md px-3 focus:outline-none"
                             >
                               <option value="">Select media type</option>
@@ -380,6 +393,7 @@ const Landing = () => {
                                       ? "image/*"
                                       : "video/*"
                                   }
+                                  disabled={loading}
                                   onChange={(e) =>
                                     handleFileChange(i, e.target.files?.[0])
                                   }
@@ -409,6 +423,7 @@ const Landing = () => {
                       <button
                         type="button"
                         onClick={generateWeb}
+                        disabled={loading}
                         className="mx-auto flex items-center justify-center gap-2 border border-red-900/30 hover:scale-103 transition-transform duration-300 text-red-600 mt-5 bg-red-100/60 py-2.5 px-6 rounded-3xl font-medium"
                       >
                         {loading ? "Generating..." : "💖 Start Generating"}
@@ -470,25 +485,31 @@ const Landing = () => {
                 <p className="font-bold pb-2 mb-2 text-xl max-w-70 text-center">
                   Check all the links associated with your email
                 </p>
-                <div className="">
-                  <label className="sm:col-span-2 text-sm">Your Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    onChange={(e) => setMyEmail(e.target.value)}
-                    id="email"
-                    className="bg-gray-200  w-full text-black border focus:border-0 border-red-600/50 rounded-md mt-1 py-2 px-3"
-                    placeholder="the_generator@gmail.com"
-                    required
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={searchLink}
-                  className="mx-auto flex items-center justify-center gap-2 border border-red-900/30 hover:scale-103 transition-transform duration-300 text-red-600 mt-5 text-sm bg-red-100/60 py-2.5 px-6 rounded-3xl font-medium"
+                <form
+                  className={loading ? "pointer-events-none opacity-60" : ""}
                 >
-                  {loading ? "Searching..." : "Start Search"}
-                </button>
+                  <div className="">
+                    <label className="sm:col-span-2 text-sm">Your Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      disabled={loading}
+                      onChange={(e) => setMyEmail(e.target.value)}
+                      id="email"
+                      className="bg-gray-200  w-full text-black border focus:border-0 border-red-600/50 rounded-md mt-1 py-2 px-3"
+                      placeholder="the_generator@gmail.com"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={searchLink}
+                    disabled={loading}
+                    className="mx-auto flex items-center justify-center gap-2 border border-red-900/30 hover:scale-103 transition-transform duration-300 text-red-600 mt-5 text-sm bg-red-100/60 py-2.5 px-6 rounded-3xl font-medium"
+                  >
+                    {loading ? "Searching..." : "Start Search"}
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -499,7 +520,7 @@ const Landing = () => {
               <div className="flex px-5 mt-20 items-center justify-center min-h-screen">
                 <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
                   <div className="grid justify-items-center">
-                    <div className="mt-6 space-y-3 w-full max-w-md">
+                    <div className="space-y-3 w-full max-w-md">
                       <h3 className="font-bold text-lg">
                         Your Generated Links
                       </h3>
