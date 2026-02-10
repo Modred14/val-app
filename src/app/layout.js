@@ -10,10 +10,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
 export const metadata = {
-  title: "Val app",
-  description: "",
+  title: {
+    default: "Valentine Web Generator",
+    template: "%s",
+  },
+  description:
+    "A web platform for generating personalized Valentine pages with music, memories, and heartfelt messages — designed to help you surprise someone special.",
 };
 
 export default function RootLayout({ children }) {
