@@ -280,7 +280,7 @@ const Landing = () => {
           </div>
         )}
         {step == 2 && (
-          <div>
+          <div className="my-5">
             <div className="flex px-5 items-center justify-center min-h-screen">
               <div className="backdrop-blur-sm shadow-lg bg-white/20 border border-white/20 rounded-3xl p-7.5">
                 <div className="grid justify-items-center">
