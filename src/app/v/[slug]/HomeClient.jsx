@@ -64,7 +64,7 @@ const Home = ({ data }) => {
 
   const handleValButton = async () => {
     setAsking(false);
-    const emailMessage = `They finally said YES after hovering over the “No” button ${hover} times and clicking it ${count} times.`;
+    const emailMessage = `${user.name} finally said YES after hovering over the “No” button ${hover} times and clicking it ${count} times.`;
     try {
       await fetch("/api/send-email", {
         method: "POST",

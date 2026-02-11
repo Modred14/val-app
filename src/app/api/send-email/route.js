@@ -14,7 +14,7 @@ export async function POST(req) {
     }
 
     await resend.emails.send({
-      from: "Modred <no-reply@val-app.com>", // works in dev
+      from: "Modred from Val-App <onboarding@resend.dev>", // works in dev
       to,
       subject: "💖 They Said YES!",
       html: `
